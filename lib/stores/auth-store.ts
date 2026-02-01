@@ -21,7 +21,6 @@ export const useAuthStore = create<AuthState>()(
       refreshToken: null,
       isAuthenticated: false,
 
-      // Set full auth state (login/register)
       setAuth: (user, accessToken, refreshToken) => {
         set({
           user,
@@ -31,12 +30,10 @@ export const useAuthStore = create<AuthState>()(
         });
       },
 
-      // Update user only (profile updates)
       setUser: (user) => {
         set({ user });
       },
 
-      // Clear all auth state (logout)
       clearAuth: () => {
         set({
           user: null,
