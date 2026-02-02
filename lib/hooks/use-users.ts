@@ -31,7 +31,6 @@ export const useUploadAvatar = () => {
   return useMutation({
     mutationFn: (file: File) => usersService.uploadAvatar(file),
     onSuccess: async (data) => {
-      // Update profile with new avatar URL
       await usersService.updateProfile({ avatar: data.url });
       queryClient.invalidateQueries({ queryKey: ['profile'] });
       toast.success('Avatar uploaded successfully');

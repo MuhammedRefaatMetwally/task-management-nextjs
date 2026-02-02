@@ -14,7 +14,6 @@ export function useWebSocket(projectId?: string) {
     const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
     if (!token) return;
 
-    // Connect to WebSocket
     const socket = io(API_CONFIG.WS_URL, {
       auth: { token },
       transports: ['websocket'],
@@ -25,7 +24,6 @@ export function useWebSocket(projectId?: string) {
     socket.on('connect', () => {
       console.log('✅ WebSocket connected');
       
-      // Join project room if projectId provided
       if (projectId) {
         socket.emit('join-project', projectId);
       }
@@ -35,7 +33,6 @@ export function useWebSocket(projectId?: string) {
       console.log('❌ WebSocket disconnected');
     });
 
-    // Listen for task events
     socket.on('task:created', (task) => {
       console.log('📝 Task created:', task);
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
@@ -67,7 +64,6 @@ export function useWebSocket(projectId?: string) {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     });
 
-    // Listen for notifications
     socket.on('notification', (notification) => {
       toast.info(notification.title, {
         description: notification.message,

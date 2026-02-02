@@ -78,16 +78,12 @@ export const useMoveTask = () => {
     mutationFn: ({ id, data }: { id: string; data: MoveTaskDto }) =>
       tasksService.moveTask(id, data),
     
-    // Optimistic update - runs immediately
     onMutate: async ({ id, data }) => {
-      // Cancel any outgoing refetches
       await queryClient.cancelQueries({ queryKey: ['tasks'] });
 
-      // Snapshot the previous value
       const previousTasks = queryClient.getQueryData(['tasks']);
       const projectQueries = queryClient.getQueriesData({ queryKey: ['tasks', 'project'] });
 
-      // Optimistically update all task queries
       queryClient.setQueriesData({ queryKey: ['tasks'] }, (old: Task[] | undefined) => {
         if (!old) return old;
         return old.map((task) =>
@@ -95,11 +91,9 @@ export const useMoveTask = () => {
         );
       });
 
-      // Return context with snapshot
       return { previousTasks, projectQueries };
     },
 
-    // On error, rollback to previous value
     onError: (err, variables, context) => {
       if (context?.previousTasks) {
         queryClient.setQueryData(['tasks'], context.previousTasks);
@@ -112,14 +106,12 @@ export const useMoveTask = () => {
       toast.error('Failed to move task');
     },
 
-    // Always refetch after error or success
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
   });
 };
 
-// Reorder tasks hook
 export const useReorderTasks = () => {
   const queryClient = useQueryClient();
 

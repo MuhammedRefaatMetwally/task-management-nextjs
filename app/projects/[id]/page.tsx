@@ -25,7 +25,6 @@ export default function ProjectDetailPage() {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  // Connect to WebSocket for real-time updates
   useWebSocket(projectId);
 
   if (projectLoading) {
@@ -56,7 +55,6 @@ export default function ProjectDetailPage() {
   return (
     <>
       <div className="flex h-full flex-col space-y-6">
-        {/* Back Button */}
         <div>
           <Button variant="ghost" size="sm" onClick={() => router.back()}>
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -64,7 +62,6 @@ export default function ProjectDetailPage() {
           </Button>
         </div>
 
-        {/* Project Header */}
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="flex-1 space-y-2">
             <div className="flex items-center gap-3">
@@ -110,13 +107,11 @@ export default function ProjectDetailPage() {
 
         <Separator />
 
-        {/* Kanban Board */}
         <div className="flex-1 overflow-hidden">
           <KanbanBoard tasks={tasks} projectId={projectId} isLoading={tasksLoading} />
         </div>
       </div>
 
-      {/* Dialogs */}
       <EditProjectDialog 
         project={project} 
         open={showEditDialog} 

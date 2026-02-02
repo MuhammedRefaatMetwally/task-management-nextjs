@@ -61,7 +61,6 @@ export default function TasksPage() {
     return matchesSearch && matchesStatus && matchesPriority && matchesProject;
   });
 
-  // Get first project for create dialog
   const firstProjectId = projects[0]?.id;
 
   return (
@@ -77,7 +76,6 @@ export default function TasksPage() {
         {firstProjectId && <CreateTaskDialog projectId={firstProjectId} />}
       </div>
 
-      {/* Filters */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -132,7 +130,6 @@ export default function TasksPage() {
         </div>
       </div>
 
-      {/* Tasks Table */}
       {isLoading ? (
         <div className="space-y-2">
           {[...Array(5)].map((_, i) => (

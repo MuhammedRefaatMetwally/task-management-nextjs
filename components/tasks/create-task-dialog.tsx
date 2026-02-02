@@ -67,13 +67,12 @@ export function CreateTaskDialog({
       status: defaultStatus,
       priority: TaskPriority.MEDIUM,
       dueDate: '',
-      assignedToId: undefined, // Changed from '' to undefined
+      assignedToId: undefined, 
       projectId,
     },
   });
 
   const onSubmit = (data: TaskFormValues) => {
-    // Remove assignedToId if it's undefined
     const submitData = {
       ...data,
       assignedToId: data.assignedToId || undefined,

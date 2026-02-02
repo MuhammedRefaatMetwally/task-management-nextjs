@@ -47,7 +47,6 @@ export function TaskCard({ task }: TaskCardProps) {
               )}
             </div>
 
-            {/* Actions Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -83,7 +82,6 @@ export function TaskCard({ task }: TaskCardProps) {
               className={`h-2 w-2 rounded-full p-0 ${priorityColors[task.priority]}`}
             />
 
-            {/* Due Date */}
             {task.dueDate && (
               <div className="flex items-center gap-1 text-xs text-muted-foreground">
                 <Calendar className="h-3 w-3" />
@@ -91,7 +89,6 @@ export function TaskCard({ task }: TaskCardProps) {
               </div>
             )}
 
-            {/* Assignee */}
             {task.assignedTo && (
               <Avatar className="h-5 w-5">
                 <AvatarImage src={task.assignedTo.avatar} />
@@ -101,7 +98,6 @@ export function TaskCard({ task }: TaskCardProps) {
               </Avatar>
             )}
 
-            {/* Tags */}
             {task.tags && task.tags.length > 0 && (
               <Badge variant="outline" className="text-xs">
                 {task.tags[0]}
@@ -111,7 +107,6 @@ export function TaskCard({ task }: TaskCardProps) {
         </CardContent>
       </Card>
 
-      {/* Dialogs */}
       <EditTaskDialog
         task={task}
         open={showEditDialog}
