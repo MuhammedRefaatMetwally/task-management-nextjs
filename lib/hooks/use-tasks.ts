@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { tasksService } from '@/lib/api';
-import type { CreateTaskDto, UpdateTaskDto } from '@/types';
+import type { CreateTaskDto, UpdateTaskDto, MoveTaskDto, ReorderTasksDto, Task } from '@/types';
 import { toast } from 'sonner';
 
 export const useTasks = (projectId?: string) => {
@@ -66,6 +66,70 @@ export const useDeleteTask = () => {
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Failed to delete task');
+    },
+  });
+};
+
+// FIXED: Optimistic move task hook
+export const useMoveTask = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: MoveTaskDto }) =>
+      tasksService.moveTask(id, data),
+    
+    // Optimistic update - runs immediately
+    onMutate: async ({ id, data }) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['tasks'] });
+
+      // Snapshot the previous value
+      const previousTasks = queryClient.getQueryData(['tasks']);
+      const projectQueries = queryClient.getQueriesData({ queryKey: ['tasks', 'project'] });
+
+      // Optimistically update all task queries
+      queryClient.setQueriesData({ queryKey: ['tasks'] }, (old: Task[] | undefined) => {
+        if (!old) return old;
+        return old.map((task) =>
+          task.id === id ? { ...task, status: data.status, order: data.order } : task
+        );
+      });
+
+      // Return context with snapshot
+      return { previousTasks, projectQueries };
+    },
+
+    // On error, rollback to previous value
+    onError: (err, variables, context) => {
+      if (context?.previousTasks) {
+        queryClient.setQueryData(['tasks'], context.previousTasks);
+      }
+      if (context?.projectQueries) {
+        context.projectQueries.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
+      toast.error('Failed to move task');
+    },
+
+    // Always refetch after error or success
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
+  });
+};
+
+// Reorder tasks hook
+export const useReorderTasks = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: ReorderTasksDto) => tasksService.reorderTasks(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
+    onError: () => {
+      toast.error('Failed to reorder tasks');
     },
   });
 };

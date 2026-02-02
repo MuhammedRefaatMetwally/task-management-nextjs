@@ -1,6 +1,6 @@
 import { apiClient, handleApiError } from './axios';
 import { API_ENDPOINTS } from '@/config/api.config';
-import type { Task, CreateTaskDto, UpdateTaskDto } from '@/types';
+import type { Task, CreateTaskDto, UpdateTaskDto, MoveTaskDto, ReorderTasksDto } from '@/types';
 
 export const tasksService = {
   async getAll(projectId?: string): Promise<Task[]> {
@@ -45,6 +45,25 @@ export const tasksService = {
   async delete(id: string): Promise<void> {
     try {
       await apiClient.delete(API_ENDPOINTS.TASKS.DELETE(id));
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
+
+  // NEW: Move task
+  async moveTask(id: string, data: MoveTaskDto): Promise<Task> {
+    try {
+      const response = await apiClient.patch<Task>(`/tasks/${id}/move`, data);
+      return response.data;
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
+
+  // NEW: Reorder tasks
+  async reorderTasks(data: ReorderTasksDto): Promise<void> {
+    try {
+      await apiClient.post('/tasks/reorder', data);
     } catch (error) {
       throw new Error(handleApiError(error));
     }

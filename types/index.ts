@@ -51,6 +51,7 @@ export interface Task {
   description?: string;
   status: TaskStatus;
   priority: TaskPriority;
+  order: number;  
   dueDate?: string;
   assignedToId?: string;
   assignedTo?: Partial<User>;
@@ -63,7 +64,14 @@ export interface Task {
   createdAt: string;
   updatedAt: string;
 }
-
+export interface MoveTaskDto {
+  status: TaskStatus;
+  order: number;
+}
+export interface ReorderTasksDto {
+  projectId: string;
+  tasks: { id: string; order: number }[];
+}
 export interface AuthResponse {
   user: User;
   accessToken: string;
