@@ -1,20 +1,20 @@
 export enum UserRole {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
+  ADMIN = "ADMIN",
+  USER = "USER",
 }
 
 export enum TaskStatus {
-  TODO = 'TODO',
-  IN_PROGRESS = 'IN_PROGRESS',
-  IN_REVIEW = 'IN_REVIEW',
-  DONE = 'DONE',
+  TODO = "TODO",
+  IN_PROGRESS = "IN_PROGRESS",
+  IN_REVIEW = "IN_REVIEW",
+  DONE = "DONE",
 }
 
 export enum TaskPriority {
-  LOW = 'LOW',
-  MEDIUM = 'MEDIUM',
-  HIGH = 'HIGH',
-  URGENT = 'URGENT',
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
+  URGENT = "URGENT",
 }
 
 export interface User {
@@ -51,6 +51,7 @@ export interface Task {
   description?: string;
   status: TaskStatus;
   priority: TaskPriority;
+  order: number;
   dueDate?: string;
   assignedToId?: string;
   assignedTo?: Partial<User>;
@@ -63,7 +64,14 @@ export interface Task {
   createdAt: string;
   updatedAt: string;
 }
-
+export interface MoveTaskDto {
+  status: TaskStatus;
+  order: number;
+}
+export interface ReorderTasksDto {
+  projectId: string;
+  tasks: { id: string; order: number }[];
+}
 export interface AuthResponse {
   user: User;
   accessToken: string;
@@ -106,19 +114,23 @@ export interface UpdateTaskDto extends Partial<CreateTaskDto> {
 }
 
 export enum NotificationType {
-  TASK_CREATED = 'TASK_CREATED',
-  TASK_UPDATED = 'TASK_UPDATED',
-  TASK_ASSIGNED = 'TASK_ASSIGNED',
-  TASK_COMPLETED = 'TASK_COMPLETED',
-  PROJECT_CREATED = 'PROJECT_CREATED',
-  PROJECT_UPDATED = 'PROJECT_UPDATED',
+  TASK_CREATED = "TASK_CREATED",
+  TASK_UPDATED = "TASK_UPDATED",
+  TASK_MOVED = "TASK_MOVED",
+  TASK_DELETED = "TASK_DELETED",
+  TASK_ASSIGNED = "TASK_ASSIGNED",
+  TASK_COMPLETED = "TASK_COMPLETED",
+  PROJECT_CREATED = "PROJECT_CREATED",
+  PROJECT_UPDATED = "PROJECT_UPDATED",
 }
 
 export interface Notification {
+  id?: string;
   type: NotificationType;
   title: string;
   message: string;
   userId: string;
   data?: any;
   createdAt?: string;
+  read?: boolean;
 }
