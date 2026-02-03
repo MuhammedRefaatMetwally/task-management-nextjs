@@ -70,7 +70,7 @@ export const useDeleteTask = () => {
   });
 };
 
-// FIXED: Optimistic move task hook
+// IMPROVED: Smoother optimistic move task hook
 export const useMoveTask = () => {
   const queryClient = useQueryClient();
 
@@ -106,8 +106,13 @@ export const useMoveTask = () => {
       toast.error('Failed to move task');
     },
 
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    onSuccess: (data) => {
+      queryClient.setQueriesData({ queryKey: ['tasks'] }, (old: Task[] | undefined) => {
+        if (!old) return old;
+        return old.map((task) =>
+          task.id === data.id ? data : task
+        );
+      });
     },
   });
 };
