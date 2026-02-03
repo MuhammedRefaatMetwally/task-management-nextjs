@@ -4,7 +4,19 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useProjects, useTasks } from '@/lib/hooks';
 import { useAuthStore } from '@/lib/stores/auth-store';
-import { FolderKanban, CheckSquare, Clock, TrendingUp } from 'lucide-react';
+import { 
+  FolderKanban, 
+  CheckSquare, 
+  Clock, 
+  TrendingUp,
+  ArrowRight,
+  Plus
+} from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { formatDistanceToNow } from 'date-fns';
 
 export default function DashboardPage() {
   const user = useAuthStore((state) => state.user);
@@ -16,34 +28,46 @@ export default function DashboardPage() {
       title: 'Total Projects',
       value: projects?.length || 0,
       icon: FolderKanban,
+      color: 'text-blue-500',
+      bgColor: 'bg-blue-500/10',
       loading: projectsLoading,
     },
     {
       title: 'Total Tasks',
       value: tasks?.length || 0,
       icon: CheckSquare,
+      color: 'text-green-500',
+      bgColor: 'bg-green-500/10',
       loading: tasksLoading,
     },
     {
       title: 'In Progress',
       value: tasks?.filter((t) => t.status === 'IN_PROGRESS').length || 0,
       icon: Clock,
+      color: 'text-yellow-500',
+      bgColor: 'bg-yellow-500/10',
       loading: tasksLoading,
     },
     {
       title: 'Completed',
       value: tasks?.filter((t) => t.isCompleted).length || 0,
       icon: TrendingUp,
+      color: 'text-purple-500',
+      bgColor: 'bg-purple-500/10',
       loading: tasksLoading,
     },
   ];
 
+  const completionRate = tasks?.length 
+    ? Math.round((tasks.filter(t => t.isCompleted).length / tasks.length) * 100)
+    : 0;
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Welcome Header */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight">
-          Welcome back, {user?.firstName}!
+          Welcome back, {user?.firstName}! 👋
         </h1>
         <p className="text-muted-foreground">
           Here&apos;s what&apos;s happening with your projects today.
@@ -55,12 +79,14 @@ export default function DashboardPage() {
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <Card key={stat.title}>
+            <Card key={stat.title} className="transition-shadow hover:shadow-md">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   {stat.title}
                 </CardTitle>
-                <Icon className="h-4 w-4 text-muted-foreground" />
+                <div className={`rounded-lg p-2 ${stat.bgColor}`}>
+                  <Icon className={`h-4 w-4 ${stat.color}`} />
+                </div>
               </CardHeader>
               <CardContent>
                 {stat.loading ? (
@@ -74,78 +100,117 @@ export default function DashboardPage() {
         })}
       </div>
 
+
       {/* Recent Activity */}
       <div className="grid gap-4 md:grid-cols-2">
+        {/* Recent Projects */}
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0">
             <CardTitle>Recent Projects</CardTitle>
+            <Link href="/projects">
+              <Button variant="ghost" size="sm">
+                View All <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </Link>
           </CardHeader>
           <CardContent>
             {projectsLoading ? (
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-3/4" />
+              <div className="space-y-3">
+                {[...Array(3)].map((_, i) => (
+                  <Skeleton key={i} className="h-16" />
+                ))}
               </div>
             ) : projects && projects.length > 0 ? (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {projects.slice(0, 5).map((project) => (
-                  <div
+                  <Link
                     key={project.id}
-                    className="flex items-center justify-between"
+                    href={`/projects/${project.id}`}
+                    className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted"
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                       {project.color && (
                         <div
                           className="h-3 w-3 rounded-full"
                           style={{ backgroundColor: project.color }}
                         />
                       )}
-                      <span className="text-sm">{project.name}</span>
+                      <div>
+                        <p className="font-medium">{project.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {project._count?.tasks || 0} tasks
+                        </p>
+                      </div>
                     </div>
-                    <span className="text-xs text-muted-foreground">
-                      {project._count?.tasks || 0} tasks
-                    </span>
-                  </div>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                  </Link>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">
-                No projects yet. Create your first project!
-              </p>
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <FolderKanban className="h-12 w-12 text-muted-foreground/50" />
+                <p className="mt-2 text-sm text-muted-foreground">
+                  No projects yet
+                </p>
+                <Link href="/projects">
+                  <Button size="sm" className="mt-3">
+                    <Plus className="mr-1 h-4 w-4" />
+                    Create Project
+                  </Button>
+                </Link>
+              </div>
             )}
           </CardContent>
         </Card>
 
+        {/* Recent Tasks */}
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0">
             <CardTitle>Recent Tasks</CardTitle>
+            <Link href="/tasks">
+              <Button variant="ghost" size="sm">
+                View All <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </Link>
           </CardHeader>
           <CardContent>
             {tasksLoading ? (
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-3/4" />
+              <div className="space-y-3">
+                {[...Array(3)].map((_, i) => (
+                  <Skeleton key={i} className="h-16" />
+                ))}
               </div>
             ) : tasks && tasks.length > 0 ? (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {tasks.slice(0, 5).map((task) => (
-                  <div
+                  <Link
                     key={task.id}
-                    className="flex items-center justify-between"
+                    href={`/projects/${task.projectId}`}
+                    className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted"
                   >
-                    <span className="text-sm">{task.title}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {task.status.replace('_', ' ')}
-                    </span>
-                  </div>
+                    <div className="flex-1 space-y-1">
+                      <p className="font-medium line-clamp-1">{task.title}</p>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Badge variant="outline" className="h-5">
+                          {task.status.replace('_', ' ')}
+                        </Badge>
+                        {task.dueDate && (
+                          <span>
+                            Due {formatDistanceToNow(new Date(task.dueDate), { addSuffix: true })}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">
-                No tasks yet. Create your first task!
-              </p>
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <CheckSquare className="h-12 w-12 text-muted-foreground/50" />
+                <p className="mt-2 text-sm text-muted-foreground">
+                  No tasks yet
+                </p>
+              </div>
             )}
           </CardContent>
         </Card>
