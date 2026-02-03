@@ -108,7 +108,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 m-5">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
         <p className="text-muted-foreground">
@@ -117,7 +117,6 @@ export default function ProfilePage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
-        {/* Avatar Card */}
         <Card>
           <CardHeader>
             <CardTitle>Avatar</CardTitle>
@@ -164,7 +163,6 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
 
-        {/* Profile Info Card */}
         <Card className="md:col-span-2">
           <CardHeader>
             <CardTitle>Personal Information</CardTitle>
@@ -234,7 +232,6 @@ export default function ProfilePage() {
         </Card>
       </div>
 
-      {/* Account Info */}
       <Card>
         <CardHeader>
           <CardTitle>Account Information</CardTitle>

@@ -29,8 +29,8 @@ export function KanbanColumn({ status, title, tasks, onAddTask }: KanbanColumnPr
   });
 
   return (
-    <Card className="flex h-full flex-col">
-      <CardHeader className="pb-3">
+    <Card className="flex h-full min-w-[280px] max-w-[400px] flex-1 flex-col">
+      <CardHeader className="flex-shrink-0 pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <CardTitle className="text-sm font-semibold">{title}</CardTitle>
@@ -46,7 +46,7 @@ export function KanbanColumn({ status, title, tasks, onAddTask }: KanbanColumnPr
         </div>
       </CardHeader>
 
-      <CardContent className="flex-1 overflow-hidden p-3 pt-0">
+      <CardContent className="flex-1 min-h-0 p-3 pt-0">
         <div
           ref={setNodeRef}
           className={`h-full overflow-y-auto rounded-md p-2 transition-colors ${
@@ -62,7 +62,7 @@ export function KanbanColumn({ status, title, tasks, onAddTask }: KanbanColumnPr
           </SortableContext>
 
           {tasks.length === 0 && (
-            <div className="flex h-full items-center justify-center">
+            <div className="flex h-32 items-center justify-center">
               <p className="text-sm text-muted-foreground">No tasks</p>
             </div>
           )}

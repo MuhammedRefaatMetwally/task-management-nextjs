@@ -94,8 +94,8 @@ export function KanbanBoard({ tasks, projectId, isLoading }: KanbanBoardProps) {
     if (COLUMNS.some((col) => col.id === overId)) {
       newStatus = overId as TaskStatus;
       const tasksInColumn = tasksByStatus[newStatus];
-      newOrder = tasksInColumn.length > 0 
-        ? Math.max(...tasksInColumn.map((t) => t.order)) + 1 
+      newOrder = tasksInColumn.length > 0
+        ? Math.max(...tasksInColumn.map((t) => t.order)) + 1
         : 0;
     } else if (overTask) {
       newStatus = overTask.status;
@@ -114,9 +114,19 @@ export function KanbanBoard({ tasks, projectId, isLoading }: KanbanBoardProps) {
 
   if (isLoading) {
     return (
-      <div className="grid h-full gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="flex h-full gap-4 overflow-x-auto">
         {COLUMNS.map((column) => (
-          <Skeleton key={column.id} className="h-full min-h-[500px]" />
+          <div
+            key={column.id}
+            className="min-w-[280px] flex-shrink-0 rounded-lg bg-muted p-3"
+          >
+            <Skeleton className="mb-3 h-6 w-32" />
+            <div className="space-y-3">
+              <Skeleton className="h-24 rounded-md" />
+              <Skeleton className="h-24 rounded-md" />
+              <Skeleton className="h-16 rounded-md" />
+            </div>
+          </div>
         ))}
       </div>
     );
@@ -128,7 +138,8 @@ export function KanbanBoard({ tasks, projectId, isLoading }: KanbanBoardProps) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="grid h-full gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {/* Container fills available space with horizontal scroll */}
+      <div className="flex h-full gap-4 overflow-x-auto pb-2">
         {COLUMNS.map((column) => (
           <KanbanColumn
             key={column.id}

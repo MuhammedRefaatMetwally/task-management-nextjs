@@ -1,6 +1,6 @@
 'use client';
 
-import { User } from 'lucide-react';
+import { Bell, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -16,7 +16,6 @@ import { useLogout } from '@/lib/hooks';
 import { getInitials } from '@/lib/utils';
 import { MobileSidebar } from './mobile-sidebar';
 import { ThemeToggle } from './theme-toggle';
-import { NotificationsPopover } from './notifications-popover';
 import Link from 'next/link';
 
 export function Header() {
@@ -24,17 +23,17 @@ export function Header() {
   const { mutate: logout } = useLogout();
 
   return (
-    <header className="sticky top-0 z-50 flex h-16 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 md:px-6">
+    <header className="sticky top-0 z-50 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <MobileSidebar />
 
       <div className="flex flex-1 items-center justify-end gap-2">
-        {/* Theme Toggle */}
         <ThemeToggle />
 
-        {/* Notifications */}
-        <NotificationsPopover />
+        <Button variant="ghost" size="icon" className="relative">
+          <Bell className="h-5 w-5" />
+          <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-primary" />
+        </Button>
 
-        {/* User Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-10 gap-2 rounded-full">

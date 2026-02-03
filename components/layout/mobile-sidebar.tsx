@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { Menu } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Sidebar } from './sidebar';
+import { Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger , SheetTitle } from "@/components/ui/sheet";
+import { Sidebar } from "./sidebar";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 export function MobileSidebar() {
   return (
@@ -14,6 +15,9 @@ export function MobileSidebar() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-64 p-0">
+        <VisuallyHidden>
+          <SheetTitle>Mobile Navigation</SheetTitle>
+        </VisuallyHidden>
         <Sidebar />
       </SheetContent>
     </Sheet>

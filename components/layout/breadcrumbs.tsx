@@ -11,17 +11,35 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import { useProject } from '@/lib/hooks';
+
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function isUUID(str: string) {
+  return UUID_REGEX.test(str);
+}
+
+
+function ResolvedLabel({ id }: { id: string }) {
+  const { data: project } = useProject(id);
+  return <>{project?.name ?? '...'}</>;
+}
 
 export function Breadcrumbs() {
   const pathname = usePathname();
-  
-  // Don't show on home/auth pages
+
   if (pathname === '/' || pathname.startsWith('/login') || pathname.startsWith('/register')) {
     return null;
   }
 
   const segments = pathname.split('/').filter(Boolean);
-  
+
+  function formatLabel(segment: string) {
+    return segment
+      .split('-')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -32,12 +50,13 @@ export function Breadcrumbs() {
             </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
-        
+
         {segments.map((segment, index) => {
           const isLast = index === segments.length - 1;
           const href = `/${segments.slice(0, index + 1).join('/')}`;
-          const label = segment.charAt(0).toUpperCase() + segment.slice(1);
-          
+
+          const label = isUUID(segment) ? <ResolvedLabel id={segment} /> : formatLabel(segment);
+
           return (
             <div key={segment} className="flex items-center gap-2">
               <BreadcrumbSeparator>

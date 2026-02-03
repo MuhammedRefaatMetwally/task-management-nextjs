@@ -15,7 +15,6 @@ import {
 export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col">
-      {/* Navigation */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
@@ -35,12 +34,11 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Hero Section */}
       <main className="flex-1">
         <section className="container grid place-items-center gap-8 px-4 py-24 md:py-32 lg:grid-cols-2">
           <div className="flex flex-col gap-6">
             <Badge className="w-fit" variant="secondary">
-              ✨ Now with Real-time Collaboration
+              Now with Real-time Collaboration
             </Badge>
             <h1 className="text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
               Project management
@@ -48,19 +46,15 @@ export default function HomePage() {
             </h1>
             <p className="text-lg text-muted-foreground lg:text-xl">
               Organize, prioritize, and collaborate on projects with a beautiful
-              Kanban board. Built for teams that want to move fast.
+               board. Built for teams that want to move fast.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link href="/register">
                 <Button size="lg" className="gap-2">
-                  Start Free Trial <ArrowRight className="h-4 w-4" />
+                  Get Started <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/login">
-                <Button size="lg" variant="outline">
-                  Watch Demo
-                </Button>
-              </Link>
+            
             </div>
             <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
@@ -71,14 +65,9 @@ export default function HomePage() {
                 <CheckCircle2 className="h-4 w-4 text-green-500" />
                 No credit card required
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-green-500" />
-                Cancel anytime
-              </div>
             </div>
           </div>
 
-          {/* Hero Image Placeholder */}
           <div className="relative hidden lg:block">
             <div className="relative aspect-square overflow-hidden rounded-xl border bg-muted/50">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5" />
@@ -97,7 +86,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Features */}
         <section className="border-t bg-muted/50">
           <div className="container px-4 py-24">
             <div className="text-center">
@@ -127,7 +115,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* CTA Section */}
         <section className="border-t">
           <div className="container px-4 py-24">
             <div className="mx-auto max-w-3xl text-center">
@@ -140,7 +127,7 @@ export default function HomePage() {
               <div className="mt-8 flex justify-center gap-4">
                 <Link href="/register">
                   <Button size="lg">
-                    Start Free Trial <ArrowRight className="ml-2 h-4 w-4" />
+                    Get Started <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
               </div>
@@ -149,7 +136,6 @@ export default function HomePage() {
         </section>
       </main>
 
-      {/* Footer */}
       <footer className="border-t">
         <div className="container flex flex-col items-center justify-between gap-4 px-4 py-8 md:flex-row">
           <div className="flex items-center gap-2">
@@ -169,7 +155,7 @@ export default function HomePage() {
 
 const features = [
   {
-    name: 'Kanban Boards',
+    name: 'Drag-and-Drop Boards',
     description: 'Visualize your workflow with beautiful drag-and-drop boards',
     icon: BarChart3,
   },
@@ -177,16 +163,6 @@ const features = [
     name: 'Real-time Collaboration',
     description: 'See changes instantly as your team works together',
     icon: Users,
-  },
-  {
-    name: 'Fast & Responsive',
-    description: 'Built for speed with optimistic updates and instant feedback',
-    icon: Zap,
-  },
-  {
-    name: 'Secure by Default',
-    description: 'Your data is encrypted and protected with industry standards',
-    icon: Lock,
   },
   {
     name: 'Mobile Friendly',

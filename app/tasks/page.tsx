@@ -51,7 +51,6 @@ export default function TasksPage() {
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
   const [projectFilter, setProjectFilter] = useState<string>('all');
 
-  // Filter tasks
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch = task.title.toLowerCase().includes(search.toLowerCase());
     const matchesStatus = statusFilter === 'all' || task.status === statusFilter;
@@ -64,8 +63,7 @@ export default function TasksPage() {
   const firstProjectId = projects[0]?.id;
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-6 m-5">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Tasks</h1>
